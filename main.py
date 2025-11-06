@@ -209,9 +209,9 @@ def prediction():
     question_label = Label(fenetre, text="Prédiction correcte ?")
     boutonOui = Button(fenetre, text="Oui", command=handle_oui)
     boutonNon = Button(fenetre, text="Non", command=handle_non)
-    question_label.grid(row=10, column=0, sticky="SW", padx=10, pady=10)
-    boutonOui.grid(row=11, column=0, sticky="SW", padx=10, pady=10)
-    boutonNon.grid(row=11, column=1, sticky="SW", padx=10, pady=10)
+    question_label.grid(row=9, column=0, sticky="W", padx=10, pady=10)
+    boutonOui.grid(row=10, column=0, sticky="W", padx=10, pady=10)
+    boutonNon.grid(row=10, column=1, sticky="W", padx=10, pady=10)
 
 def correction():
     global w1_jeu, w1_fatigue, w1_motivation, w1_duo, b1
@@ -325,7 +325,7 @@ boutonPredir=Button(fenetre, text="predire", command=prediction)
 boutonPredir.grid(row=8, column=0, columnspan=6, sticky="WE", padx=10, pady=20)
 
 boutonReboot=Button(fenetre, text="Reboot", command=reboot)
-boutonReboot.grid(row=10, column=0, columnspan=6, sticky="WE", padx=10, pady=20)
+boutonReboot.grid(row=0, column=5, sticky="NE", padx=5, pady=5)
 
 
 fenetre.mainloop()
