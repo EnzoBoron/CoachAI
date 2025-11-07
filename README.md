@@ -24,7 +24,7 @@ Elle intègre un *système d’adaptation du taux d’apprentissage (learning ra
 Un bouton de redémarrage permet d’intégrer des mises à jour sans perte des poids enregistrés.
 Et si l’IA s’arrête, elle reprend automatiquement les derniers poids lors du redémarrage.
 
-🧠 Le projet atteint ici sa limite logique : avec seulement 4 entrées, les prédictions restent simples.
+Le projet atteint ici sa limite logique : avec seulement 4 entrées, les prédictions restent simples.
 Mais il remplit son rôle — comprendre comment créer une IA basique et fonctionnelle.
 
 ## 🚀 Utilisation
