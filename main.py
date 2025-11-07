@@ -58,63 +58,6 @@ label_prediction = None
 suite_correct = 0
 suite_incorrect = 0
 
-class Nerone:
-    def __init__(self):
-        self.W = []
-        self.V = []
-        self.B = []
-        self.A_H1 = []
-
-    def add_deep_nerone(self, n):
-        for nn in range(n):
-            self.W.append(random.uniform(-0.5, 0.5))
-            self.V.append(random.uniform(-0.5, 0.5))
-            self.B.append(random.uniform(-0.5, 0.5))
-
-    def sigmoid(self, x):
-        return 1 / (1 + math.exp(-x))
-        
-    def prediction(self, x_game, x_fatigue, x_motivation, x_duo):
-        x = [float(x_game), float(x_fatigue), float(x_motivation), float(x_duo)]
-
-        A_H1 = []
-        for k in range(len(self.W)):
-            z = sum(wj * xj for wj, xj in zip(self.W[k], x)) + self.B[k]
-            A_H1.append(self.sigmoid(z))
-
-        out = sum(a * v for a, v in zip(A_H1, self.V)) + self.b_out
-        return self.sigmoid(out)
-
-    def correction():
-        delta_out = delta_1 - a_out[-1]
-
-        delta_h1 = (v1 * delta_out) * a_h1 * (1 - a_h1)
-        delta_h2 = (v2 * delta_out) * a_h2 * (1 - a_h2)
-        delta_h3 = (v3 * delta_out) * a_h3 * (1 - a_h3)
-
-        v1 += delta_out * learning * a_h1
-        v2 += delta_out * learning * a_h2
-        v3 += delta_out * learning * a_h3
-        b_out += learning * delta_out
-
-        w1_jeu += delta_h1 * learning * x_game
-        w1_fatigue += delta_h1 * learning * x_fatigue
-        w1_motivation += delta_h1 * learning * x_motivation
-        w1_duo += delta_h1 * learning * x_duo
-        b1 += delta_h1 * learning
-
-        w2_jeu += delta_h2 * learning * x_game
-        w2_fatigue += delta_h2 * learning * x_fatigue
-        w2_motivation += delta_h2 * learning * x_motivation
-        w2_duo += delta_h2 * learning * x_duo
-        b2 += delta_h2 * learning
-
-        w3_jeu += delta_h3 * learning * x_game
-        w3_fatigue += delta_h3 * learning * x_fatigue
-        w3_motivation += delta_h3 * learning * x_motivation
-        w3_duo += delta_h3 * learning * x_duo
-        b3 += delta_h3 * learning
-
 def rate_scheduler():
     global suite_correct, suite_incorrect, bool_learning, learning
 
@@ -314,10 +257,14 @@ def init():
     global w3_jeu, w3_fatigue, w3_motivation, w3_duo, b3
     global learning, a_out, a_h1, a_h2, a_h3, delta_1
     global v1, v2, v3, b_out
+    global bool_learning
 
     with open("data.csv", "r") as f:
         lines = f.readlines()
         last_line = lines[-1].strip()
+
+    if last_line == 0:
+        return
 
     values = last_line.split(",")
 
@@ -341,33 +288,41 @@ def init():
     v3 = float(values[17])
     b_out = float(values[18])
     learning = float(values[19])
-    bool_learning = values[20]
+    bool_learning = bool(values[20])
     delta_1 = float(values[21])
     a_out.append(float(values[22]))
     print("Initialisation complete.")
 
+# Début du programme
 init()
 fenetre = Tk()
 fenetre.title("coachAI")
 largeur = fenetre.winfo_screenwidth()
 hauteur = fenetre.winfo_screenheight()
-fenetre.geometry(f"{int(largeur*0.7)}x{int(hauteur*0.2)}")
+fenetre.geometry(f"{int(largeur*0.7)}x{int(hauteur*0.4)}")
 
 label_prediction = Label(fenetre)
 
 menubar = Menu(fenetre)
 menu1 = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Fichier", menu=menu1)
+menu1.add_command(label="Ouvrir", command=lambda: print("Ouvrir"))
+menu1.add_separator()
+menu1.add_command(label="Rénitialisé", command=lambda: print("Rénitialisé"))
+menu1.add_separator()
+menu1.add_command(label="Quitter", command=fenetre.quit)
 
 menu2 = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Editer", menu=menu2)
+menu2.add_command(label="Copier", command=lambda: print("Copier"))
 
 menu3 = Menu(menubar, tearoff=0)
-menubar.add_cascade(label="Aide", menu=menu3)
+menubar.add_cascade(label="A propos", menu=menu3)
+menu3.add_command(label="Aide", command=lambda: print("aide"))
 
 fenetre.config(menu=menubar)
 
-game_label = Label(fenetre, text="Choose your game:")
+game_label = Label(fenetre, text="Choose your game:")   
 game_value = StringVar() 
 overwatch = Radiobutton(fenetre, text="Overwatch", variable=game_value, value=0)
 fortnite = Radiobutton(fenetre, text="Fortnite", variable=game_value, value=1)
@@ -416,6 +371,5 @@ boutonPredir.grid(row=8, column=0, columnspan=6, sticky="WE", padx=10, pady=20)
 
 boutonReboot=Button(fenetre, text="Reboot", command=reboot)
 boutonReboot.grid(row=0, column=5, sticky="NE", padx=5, pady=5)
-
 
 fenetre.mainloop()
